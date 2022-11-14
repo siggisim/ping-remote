@@ -5,6 +5,8 @@ if ! grep -E '^--remote_executor=.*\.buildbuddy\.io$' "$1" &>/dev/null; then
   exit 0
 fi
 
+function timeout() { perl -e 'alarm shift; exec @ARGV' "$@"; }
+
 # Make sure we can ping the remote execution service in 500ms.
 if ! timeout 0.5 ping -c 1 remote.buildbuddy.io &>/dev/null; then
   # Network is spotty; disable remote execution.
